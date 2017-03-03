@@ -13,24 +13,24 @@ public class JMSPublisher<T> extends Publisher<T>
 	private final MessageProducer producer;
 	private final Session session;
 
-	public JMSPublisher(Connection connection, Topic topic, Serializer<T> serializer, Class<T> type) throws JMSException
+	public JMSPublisher(Class<T> type, Serializer<T> serializer, Topic topic, Connection connection) throws JMSException
 	{
-		super(type, serializer);
+		super(type, serializer, topic.getTopicName());
 
 		this.connection = connection;
 		this.topic = topic;
 		this.session = this.connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
 		this.producer = this.session.createProducer(topic);
-
+		this.connection.start();
 	}
 
 	@Override
-	public void fire(T data, String topic, SerializationType type)
+	public void fire(T data, SerializationType type)
 	{
 		try
 		{
 			Message message = this.createMessage(data, type);
-			this.producer.send(this.topic, message);
+			this.producer.send(message);
 		}
 		catch (JMSException e)
 		{
@@ -44,6 +44,7 @@ public class JMSPublisher<T> extends Publisher<T>
 	{
 		try
 		{
+			this.connection.stop();
 			this.connection.close(); //no need to close sessions and producers once closing the connection
 		}
 		catch (JMSException e)
@@ -64,7 +65,7 @@ public class JMSPublisher<T> extends Publisher<T>
 				byte[] bytes = this.serializer.serializeToBytes(data);
 				BytesMessage message = this.session.createBytesMessage();
 				message.writeBytes(bytes);
-				message.setIntProperty("length",bytes.length);
+				message.setIntProperty("length", bytes.length);
 				toReturn = message;
 				break;
 			}

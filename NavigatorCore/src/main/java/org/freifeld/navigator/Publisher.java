@@ -8,14 +8,16 @@ public abstract class Publisher<T> implements AutoCloseable
 {
 	protected final Serializer<T> serializer;
 	protected final Class<T> type;
+	protected final String topic;
 
-	public Publisher(Class<T> type, Serializer<T> serializer)
+	public Publisher(Class<T> type, Serializer<T> serializer, String topic)
 	{
 		this.type = type;
 		this.serializer = serializer;
+		this.topic = topic;
 	}
 
-	public abstract void fire(T data, String topic, SerializationType type);
+	public abstract void fire(T data, SerializationType type);
 
 	public Class<T> getType()
 	{

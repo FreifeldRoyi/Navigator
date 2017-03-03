@@ -13,17 +13,18 @@ public class JMSSubscriber<T> extends Subscriber<T>
 	private final Session session;
 	private final MessageConsumer consumer;
 
-	public JMSSubscriber(Connection connection, Topic topic, Deserializer<T> deserializer, Class<T> type) throws JMSException
+	public JMSSubscriber(Class<T> type, Deserializer<T> deserializer, Topic topic, Connection connection) throws JMSException
 	{
-		super(type, deserializer);
+		super(type, deserializer, topic.getTopicName());
 		this.connection = connection;
 		this.topic = topic;
 		this.session = this.connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
 		this.consumer = this.session.createConsumer(topic);
+		this.connection.start();
 	}
 
 	@Override
-	public T feed(String topic)
+	public T feed()
 	{
 		T toReturn = null;
 		Message message = null;
@@ -47,6 +48,7 @@ public class JMSSubscriber<T> extends Subscriber<T>
 	{
 		try
 		{
+			this.connection.stop();
 			this.connection.close();
 		}
 		catch (JMSException e)

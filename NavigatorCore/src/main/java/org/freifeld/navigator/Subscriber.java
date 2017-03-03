@@ -8,14 +8,16 @@ public abstract class Subscriber<T> implements AutoCloseable
 {
 	protected final Deserializer<T> deserializer;
 	protected final Class<T> type;
+	protected final String topic;
 
-	public Subscriber(Class<T> type, Deserializer<T> deserializer)
+	public Subscriber(Class<T> type, Deserializer<T> deserializer, String topic)
 	{
 		this.type = type;
 		this.deserializer = deserializer;
+		this.topic = topic;
 	}
 
-	public abstract T feed(String topic);
+	public abstract T feed();
 
 	public Class<T> getType()
 	{

@@ -38,8 +38,8 @@ public class JMSFactory extends PubSubFactory
 		Publisher<T> toReturn = null;
 		try
 		{
-			Topic lookupTopic = (Topic) context.lookup(topic);
-			toReturn = new JMSPublisher<>(this.factory.createConnection(), lookupTopic, this.serializationFactory.createSerializer(cls), cls);
+			Topic lookupTopic = (Topic) context.lookup("topic/" + topic);
+			toReturn = new JMSPublisher<>(cls, this.serializationFactory.createSerializer(cls), lookupTopic, this.factory.createConnection());
 		}
 		catch (NamingException e)
 		{
@@ -62,8 +62,8 @@ public class JMSFactory extends PubSubFactory
 
 		try
 		{
-			Topic lookupTopic = (Topic) context.lookup(topic);
-			toReturn = new JMSSubscriber<>(this.factory.createConnection(), lookupTopic, this.serializationFactory.createDeserializer(cls), cls);
+			Topic lookupTopic = (Topic) context.lookup("topic/" + topic);
+			toReturn = new JMSSubscriber<>(cls, this.serializationFactory.createDeserializer(cls), lookupTopic, this.factory.createConnection());
 		}
 		catch (NamingException e)
 		{

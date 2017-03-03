@@ -6,11 +6,13 @@ package org.freifeld.navigator;
  */
 public abstract class Subscriber<T> implements AutoCloseable
 {
-	private Class<T> type;
+	protected final Deserializer<T> deserializer;
+	protected final Class<T> type;
 
-	public Subscriber(Class<T> type)
+	public Subscriber(Class<T> type, Deserializer<T> deserializer)
 	{
 		this.type = type;
+		this.deserializer = deserializer;
 	}
 
 	public abstract T feed(String topic);

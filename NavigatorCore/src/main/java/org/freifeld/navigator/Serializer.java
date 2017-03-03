@@ -6,7 +6,7 @@ package org.freifeld.navigator;
  */
 public interface Serializer<T>
 {
-	String serializeToString(T type);
+	String serializeToString(T data);
 
-	byte[] serializeToBytes(T type);
+	byte[] serializeToBytes(T data);
 }

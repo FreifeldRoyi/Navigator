@@ -1,0 +1,95 @@
+package org.freifeld.navigator;
+
+import javax.jms.ConnectionFactory;
+import javax.jms.JMSException;
+import javax.jms.Topic;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import java.util.Set;
+
+/**
+ * @author royif
+ * @since 24/02/17
+ */
+public class JMSFactory extends PubSubFactory
+{
+	private InitialContext context;
+	private ConnectionFactory factory;
+	private SerializationFactory serializationFactory;
+
+	public JMSFactory(SerializationFactory serializationFactory, Set<Class<?>> supportedTypes)
+	{
+		super(serializationFactory, supportedTypes);
+		try
+		{
+			this.context = new InitialContext();
+			this.factory = (ConnectionFactory) context.lookup("ConnectionFactory");
+		}
+		catch (NamingException e)
+		{
+			//TODO logs
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public <T> Publisher<T> createPublisher(Class<T> cls, String topic)
+	{
+		Publisher<T> toReturn = null;
+		try
+		{
+			Topic lookupTopic = (Topic) context.lookup(topic);
+			toReturn = new JMSPublisher<>(this.factory.createConnection(), lookupTopic, this.serializationFactory.createSerializer(cls), cls);
+		}
+		catch (NamingException e)
+		{
+			//TODO logs
+			e.printStackTrace();
+		}
+		catch (JMSException e)
+		{
+			//TODO logs
+			e.printStackTrace();
+		}
+
+		return toReturn;
+	}
+
+	@Override
+	public <T> Subscriber<T> createSubscriber(Class<T> cls, String topic)
+	{
+		Subscriber<T> toReturn = null;
+
+		try
+		{
+			Topic lookupTopic = (Topic) context.lookup(topic);
+			toReturn = new JMSSubscriber<>(this.factory.createConnection(), lookupTopic, this.serializationFactory.createDeserializer(cls), cls);
+		}
+		catch (NamingException e)
+		{
+			//TODO logs
+			e.printStackTrace();
+		}
+		catch (JMSException e)
+		{
+			//TODO logs
+			e.printStackTrace();
+		}
+
+		return toReturn;
+	}
+
+	@Override
+	public void close()
+	{
+		try
+		{
+			this.context.close();
+		}
+		catch (NamingException e)
+		{
+			//TODO
+			e.printStackTrace();
+		}
+	}
+}

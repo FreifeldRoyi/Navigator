@@ -6,7 +6,7 @@ package org.freifeld.navigator;
  */
 public interface SerializationFactory
 {
-	<T> Serializer<T> createSeriazlier(Class<T> cls);
+	<T> Serializer<T> createSerializer(Class<T> cls);
 
 	<T> Deserializer<T> createDeserializer(Class<T> cls);
 }

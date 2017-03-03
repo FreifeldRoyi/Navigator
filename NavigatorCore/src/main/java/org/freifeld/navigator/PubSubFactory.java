@@ -7,18 +7,20 @@ import java.util.Set;
  * @author royif
  * @since 24/02/17
  */
-public abstract class PubSubFactory
+public abstract class PubSubFactory implements AutoCloseable
 {
 	private final Set<Class<?>> supportedTypes;
+	private final SerializationFactory serializationFactory;
 
-	public PubSubFactory(Set<Class<?>> supportedTypes)
+	public PubSubFactory(SerializationFactory serializationFactory, Set<Class<?>> supportedTypes)
 	{
 		this.supportedTypes = supportedTypes;
+		this.serializationFactory = serializationFactory;
 	}
 
-	public abstract <T> Publisher<T> createPublisher(Class<T> cls);
+	public abstract <T> Publisher<T> createPublisher(Class<T> cls, String topic);
 
-	public abstract <T> Subscriber<T> createSubscriber(Class<T> cls);
+	public abstract <T> Subscriber<T> createSubscriber(Class<T> cls, String topic);
 
 	public boolean isTypeSupported(Class<?> cls)
 	{

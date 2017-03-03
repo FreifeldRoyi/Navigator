@@ -6,14 +6,16 @@ package org.freifeld.navigator;
  */
 public abstract class Publisher<T> implements AutoCloseable
 {
-	private Class<T> type;
+	protected final Serializer<T> serializer;
+	protected final Class<T> type;
 
-	public Publisher(Class<T> type)
+	public Publisher(Class<T> type, Serializer<T> serializer)
 	{
 		this.type = type;
+		this.serializer = serializer;
 	}
 
-	public abstract void fire(T data, String topic);
+	public abstract void fire(T data, String topic, SerializationType type);
 
 	public Class<T> getType()
 	{

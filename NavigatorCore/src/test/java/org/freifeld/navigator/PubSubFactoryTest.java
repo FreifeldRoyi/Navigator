@@ -1,8 +1,5 @@
 package org.freifeld.navigator;
 
-import org.freifeld.navigator.PubSubFactory;
-import org.freifeld.navigator.Publisher;
-import org.freifeld.navigator.Subscriber;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -32,9 +29,9 @@ public class PubSubFactoryTest
 	}
 
 	@Test
-	public void testCreateSubscriber(Class<?> cls)
+	public void testCreateSubscriber(Class<?> cls, String topic)
 	{
-		Subscriber<?> subscriber = this.factory.createSubscriber(cls);
+		Subscriber<?> subscriber = this.factory.createSubscriber(cls, topic);
 		if (this.factory.isTypeSupported(cls))
 		{
 			Assert.assertNotNull(subscriber);
@@ -46,9 +43,9 @@ public class PubSubFactoryTest
 	}
 
 	@Test
-	public void testCreatePublisher(Class<?> cls)
+	public void testCreatePublisher(Class<?> cls, String topic)
 	{
-		Publisher<?> publisher = this.factory.createPublisher(cls);
+		Publisher<?> publisher = this.factory.createPublisher(cls, topic);
 		if (this.factory.isTypeSupported(cls))
 		{
 			Assert.assertNotNull(publisher);

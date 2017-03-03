@@ -11,7 +11,7 @@
 
 	<modules>
 		<module>NavigatorCore</module>
-		<module>Navigator-JMSPubSub</module>
+		<module>NavigatorJMS</module>
 	</modules>
 
 	<properties>

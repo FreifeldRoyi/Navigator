@@ -3,6 +3,9 @@ package org.freifeld.navigator;
 import org.apache.avro.Schema;
 import org.apache.avro.reflect.ReflectData;
 import org.apache.commons.cli.*;
+import org.codehaus.jackson.JsonNode;
+import org.codehaus.jackson.JsonParser;
+import org.codehaus.jackson.map.ObjectMapper;
 
 import java.io.IOException;
 import java.net.URL;
@@ -43,7 +46,12 @@ public class AvroSchemaCreatorTool
 				Class<?> cls = loader.loadClass(cmd.getOptionValue(CLASS_NAME.getName()));
 				loader.close();
 				Schema schema = ReflectData.get().getSchema(cls);
-				Files.write(Paths.get(outputFileName), schema.toString().getBytes());
+
+				ObjectMapper mapper = new ObjectMapper();
+				JsonParser jsonParser = mapper.getJsonFactory().createJsonParser(schema.toString());
+				JsonNode jsonNode = mapper.readTree(jsonParser);
+				String schemaStr = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(jsonNode) + "\n";
+				Files.write(Paths.get(outputFileName), schemaStr.getBytes());
 				System.out.println("Done. The schema file is located in " + outputFileName);
 			}
 			catch (ClassNotFoundException | IOException e)

@@ -17,29 +17,29 @@
 		<version.avro>1.8.1</version.avro>
 	</properties>
 
-	<!--<build>-->
-	<!--<plugins>-->
-	<!--<plugin>-->
-	<!--<groupId>org.apache.avro</groupId>-->
-	<!--<artifactId>avro-maven-plugin</artifactId>-->
-	<!--<version>${version.avro}</version>-->
-	<!--<executions>-->
-	<!--<execution>-->
-	<!--<phase>generate-sources</phase>-->
-	<!--<goals>-->
-	<!--<goal>schema</goal>-->
-	<!--<goal>protocol</goal>-->
-	<!--<goal>idl-protocol</goal>-->
-	<!--</goals>-->
-	<!--<configuration>-->
-	<!--<sourceDirectory>${project.basedir}/src/test/resources/avro/</sourceDirectory>-->
-	<!--<outputDirectory>${project.basedir}/src/test/java/</outputDirectory>-->
-	<!--</configuration>-->
-	<!--</execution>-->
-	<!--</executions>-->
-	<!--</plugin>-->
-	<!--</plugins>-->
-	<!--</build>-->
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.avro</groupId>
+				<artifactId>avro-maven-plugin</artifactId>
+				<version>${version.avro}</version>
+				<executions>
+					<execution>
+						<phase>generate-test-sources</phase>
+						<goals>
+							<goal>schema</goal>
+							<goal>protocol</goal>
+							<goal>idl-protocol</goal>
+						</goals>
+						<configuration>
+							<sourceDirectory>${project.basedir}/src/test/resources/avro/</sourceDirectory>
+							<outputDirectory>${project.basedir}/src/test/java/</outputDirectory>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
 
 	<dependencies>
 		<dependency>

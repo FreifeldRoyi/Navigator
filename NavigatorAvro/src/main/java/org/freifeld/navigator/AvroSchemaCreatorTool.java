@@ -33,6 +33,7 @@ public class AvroSchemaCreatorTool
 			{
 				HelpFormatter formatter = new HelpFormatter();
 				formatter.printHelp("avro-schema-creator -c <class> -d directory", options);
+				System.exit(1);
 			}
 
 			//TODO validate the filename

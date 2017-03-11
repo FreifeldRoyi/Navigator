@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<parent>
 		<artifactId>Navigator</artifactId>
@@ -18,7 +18,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.freifeld</groupId>
-			<artifactId>Navigator-Core</artifactId>
+			<artifactId>NavigatorCore</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 
@@ -26,6 +26,12 @@
 			<groupId>javax.jms</groupId>
 			<artifactId>javax.jms-api</artifactId>
 			<version>${version.jms-api}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.activemq</groupId>
+			<artifactId>artemis-jms-client</artifactId>
+			<version>1.5.3</version>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 

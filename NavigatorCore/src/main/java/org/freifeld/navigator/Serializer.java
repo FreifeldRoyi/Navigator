@@ -4,9 +4,22 @@ package org.freifeld.navigator;
  * @author royif
  * @since 24/02/17
  */
-public interface Serializer<T>
+public abstract class Serializer<T> implements AutoCloseable
 {
-	String serializeToString(T data);
+	protected final Class<T> type;
 
-	byte[] serializeToBytes(T data);
+	public Serializer(Class<T> type)
+	{
+		this.type = type;
+	}
+
+	public abstract String serializeToString(T data);
+
+	public abstract byte[] serializeToBytes(T data);
+
+	@Override
+	public void close() throws Exception
+	{
+		//Left blank intentionally
+	}
 }

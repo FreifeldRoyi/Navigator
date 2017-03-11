@@ -4,9 +4,22 @@ package org.freifeld.navigator;
  * @author royif
  * @since 24/02/17
  */
-public interface Deserializer<T>
+public abstract class Deserializer<T> implements AutoCloseable
 {
-	T deserialize(String str);
+	protected final Class<T> type;
 
-	T deserialize(byte[] bytes);
+	public Deserializer(Class<T> type)
+	{
+		this.type = type;
+	}
+
+	@Override
+	public void close() throws Exception
+	{
+		//Left blank intentionally
+	}
+
+	abstract T deserialize(String str);
+
+	abstract T deserialize(byte[] bytes);
 }

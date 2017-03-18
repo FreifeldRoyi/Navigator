@@ -13,6 +13,7 @@
 		<module>NavigatorCore</module>
 		<module>NavigatorJMS</module>
 		<module>NavigatorAvro</module>
+		<module>NavigatorTests</module>
 	</modules>
 
 	<properties>

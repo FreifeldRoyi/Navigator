@@ -1,0 +1,12 @@
+{
+  "type" : "record",
+  "name" : "User",
+  "namespace" : "avro.org.freifeld.navigator",
+  "fields" : [ {
+    "name" : "name",
+    "type" : "string"
+  }, {
+    "name" : "age",
+    "type" : "int"
+  } ]
+}

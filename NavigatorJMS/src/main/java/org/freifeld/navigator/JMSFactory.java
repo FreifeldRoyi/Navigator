@@ -15,7 +15,6 @@ public class JMSFactory extends PubSubFactory
 {
 	private InitialContext context;
 	private ConnectionFactory factory;
-	private SerializationFactory serializationFactory;
 
 	public JMSFactory(SerializationFactory serializationFactory, Set<Class<?>> supportedTypes)
 	{

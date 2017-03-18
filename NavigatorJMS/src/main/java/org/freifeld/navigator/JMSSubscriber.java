@@ -32,7 +32,6 @@ public class JMSSubscriber<T> extends Subscriber<T>
 		{
 			message = this.consumer.receive();
 			toReturn = this.assembleMessage(message);
-
 		}
 		catch (JMSException e)
 		{

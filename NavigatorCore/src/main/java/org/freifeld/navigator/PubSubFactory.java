@@ -9,8 +9,8 @@ import java.util.Set;
  */
 public abstract class PubSubFactory implements AutoCloseable
 {
-	private final Set<Class<?>> supportedTypes;
-	private final SerializationFactory serializationFactory;
+	protected final Set<Class<?>> supportedTypes;
+	protected final SerializationFactory serializationFactory;
 
 	public PubSubFactory(SerializationFactory serializationFactory, Set<Class<?>> supportedTypes)
 	{

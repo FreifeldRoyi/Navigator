@@ -12,6 +12,7 @@
 	<artifactId>NavigatorCore</artifactId>
 
 	<dependencies>
+		<!-- Testing dependencies -->
 		<dependency>
 			<groupId>org.testng</groupId>
 			<artifactId>testng</artifactId>

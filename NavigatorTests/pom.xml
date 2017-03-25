@@ -61,25 +61,6 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>org.freifeld</groupId>
-			<artifactId>NavigatorCore</artifactId>
-			<version>${project.version}</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.freifeld</groupId>
-			<artifactId>NavigatorAvro</artifactId>
-			<version>${project.version}</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.freifeld</groupId>
-			<artifactId>NavigatorJMS</artifactId>
-			<version>${project.version}</version>
-			<scope>test</scope>
-		</dependency>
-
-		<dependency>
 			<groupId>org.apache.activemq</groupId>
 			<artifactId>artemis-jms-client</artifactId>
 			<version>${version.artemis}</version>
@@ -95,6 +76,26 @@
 			<groupId>org.apache.activemq</groupId>
 			<artifactId>artemis-server</artifactId>
 			<version>${version.artemis}</version>
+			<scope>test</scope>
+		</dependency>
+
+		<!-- Module dependencies -->
+		<dependency>
+			<groupId>org.freifeld</groupId>
+			<artifactId>NavigatorCore</artifactId>
+			<version>${project.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.freifeld</groupId>
+			<artifactId>NavigatorAvro</artifactId>
+			<version>${project.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.freifeld</groupId>
+			<artifactId>NavigatorJMS</artifactId>
+			<version>${project.version}</version>
 			<scope>test</scope>
 		</dependency>
 

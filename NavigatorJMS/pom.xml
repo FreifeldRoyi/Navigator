@@ -18,12 +18,6 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>org.freifeld</groupId>
-			<artifactId>NavigatorCore</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-
-		<dependency>
 			<groupId>javax.jms</groupId>
 			<artifactId>javax.jms-api</artifactId>
 			<version>${version.jms-api}</version>
@@ -46,6 +40,13 @@
 			<artifactId>artemis-server</artifactId>
 			<version>${version.artemis}</version>
 			<scope>test</scope>
+		</dependency>
+
+		<!-- Module dependencies -->
+		<dependency>
+			<groupId>org.freifeld</groupId>
+			<artifactId>NavigatorCore</artifactId>
+			<version>${project.version}</version>
 		</dependency>
 
 		<!-- Testing Dependencies -->

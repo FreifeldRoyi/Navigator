@@ -12,12 +12,31 @@
 	<artifactId>NavigatorTests</artifactId>
 
 	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
 		<version.avro>1.8.1</version.avro>
 		<version.artemis>1.5.3</version.artemis>
 	</properties>
 
 	<build>
 		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-failsafe-plugin</artifactId>
+				<version>2.19.1</version>
+				<!--<configuration>-->
+					<!--<testSourceDirectory>/src/integration-test/java</testSourceDirectory>-->
+				<!--</configuration>-->
+				<executions>
+					<execution>
+						<goals>
+							<goal>integration-test</goal>
+							<goal>verify</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
 			<plugin>
 				<groupId>org.apache.avro</groupId>
 				<artifactId>avro-maven-plugin</artifactId>

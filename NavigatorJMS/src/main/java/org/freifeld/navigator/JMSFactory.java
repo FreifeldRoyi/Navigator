@@ -5,7 +5,6 @@ import javax.jms.JMSException;
 import javax.jms.Topic;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
-import java.util.Set;
 
 /**
  * @author royif
@@ -16,7 +15,7 @@ public class JMSFactory extends PubSubFactory
 	private InitialContext context;
 	private ConnectionFactory factory;
 
-	public JMSFactory(SerializationFactory serializationFactory, Set<Class<?>> supportedTypes)
+	public JMSFactory(SerializationFactory serializationFactory, Class<?>... supportedTypes)
 	{
 		super(serializationFactory, supportedTypes);
 		try
@@ -32,7 +31,7 @@ public class JMSFactory extends PubSubFactory
 	}
 
 	@Override
-	public <T> Publisher<T> createPublisher(Class<T> cls, String topic)
+	protected <T> Publisher<T> createLegalPublisher(Class<T> cls, String topic)
 	{
 		Publisher<T> toReturn = null;
 		try
@@ -40,12 +39,7 @@ public class JMSFactory extends PubSubFactory
 			Topic lookupTopic = (Topic) context.lookup("topic/" + topic);
 			toReturn = new JMSPublisher<>(cls, this.serializationFactory.createSerializer(cls), lookupTopic, this.factory.createConnection());
 		}
-		catch (NamingException e)
-		{
-			//TODO logs
-			e.printStackTrace();
-		}
-		catch (JMSException e)
+		catch (NamingException | JMSException e)
 		{
 			//TODO logs
 			e.printStackTrace();
@@ -55,7 +49,7 @@ public class JMSFactory extends PubSubFactory
 	}
 
 	@Override
-	public <T> Subscriber<T> createSubscriber(Class<T> cls, String topic)
+	protected <T> Subscriber<T> createLegalSubscriber(Class<T> cls, String topic)
 	{
 		Subscriber<T> toReturn = null;
 
@@ -64,12 +58,7 @@ public class JMSFactory extends PubSubFactory
 			Topic lookupTopic = (Topic) context.lookup("topic/" + topic);
 			toReturn = new JMSSubscriber<>(cls, this.serializationFactory.createDeserializer(cls), lookupTopic, this.factory.createConnection());
 		}
-		catch (NamingException e)
-		{
-			//TODO logs
-			e.printStackTrace();
-		}
-		catch (JMSException e)
+		catch (NamingException | JMSException e)
 		{
 			//TODO logs
 			e.printStackTrace();

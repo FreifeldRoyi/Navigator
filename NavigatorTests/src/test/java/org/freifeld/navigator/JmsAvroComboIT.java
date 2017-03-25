@@ -20,7 +20,6 @@ import org.testng.annotations.Test;
 
 import javax.naming.InitialContext;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.concurrent.CompletableFuture;
 
 /**
@@ -30,8 +29,9 @@ import java.util.concurrent.CompletableFuture;
 public class JmsAvroComboIT
 {
 	private final static String TOPIC_USERS = "Users";
-	protected SerializationFactory serializationFactory;
-	protected PubSubFactory pubSubFactory;
+	private InitialContext context;
+	private SerializationFactory serializationFactory;
+	private PubSubFactory pubSubFactory;
 	private EmbeddedJMS embeddedJMS;
 
 	@BeforeClass
@@ -48,11 +48,11 @@ public class JmsAvroComboIT
 		this.embeddedJMS = new EmbeddedJMS().setConfiguration(configuration).setJmsConfiguration(jmsConfiguration);
 		try
 		{
-			InitialContext context = new InitialContext();
+			this.context = new InitialContext();
 			this.embeddedJMS.setContext(context);
 
 			this.serializationFactory = new AvroSerializationFactory();
-			this.pubSubFactory = new JMSFactory(this.serializationFactory, new HashSet<>(Collections.singletonList(User.class)));
+			this.pubSubFactory = new JMSFactory(this.serializationFactory, User.class);
 
 			this.embeddedJMS.start();
 		}
@@ -63,11 +63,13 @@ public class JmsAvroComboIT
 	}
 
 	@AfterClass
-	public void teadDown()
+	public void tearDown()
 	{
 		try
 		{
 			this.embeddedJMS.stop();
+			this.pubSubFactory.close();
+			this.context.close();
 		}
 		catch (Exception e)
 		{

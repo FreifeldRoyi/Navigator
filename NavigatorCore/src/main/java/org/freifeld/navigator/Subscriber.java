@@ -1,5 +1,8 @@
 package org.freifeld.navigator;
 
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
+
 /**
  * @author royif
  * @since 24/02/17
@@ -17,7 +20,30 @@ public abstract class Subscriber<T> implements AutoCloseable
 		this.topic = topic;
 	}
 
+	/**
+	 * A synchronous (blocking) call to receive a new message
+	 * @return object T
+	 */
 	public abstract T feed();
+
+	/**
+	 * Async wrapper for {@link #feed} runs on the default Java ExecutorService
+	 * @return {@link CompletableFuture} of type T
+	 */
+	public CompletableFuture<T> feedAsync()
+	{
+		return CompletableFuture.supplyAsync(this::feed);
+	}
+
+	/**
+	 * Async wrapper for {@link #feed} runs on the default Java ExecutorService
+	 * @param service - The {@link ExecutorService} to run on
+	 * @return {@link CompletableFuture} of type T
+	 */
+	public CompletableFuture<T> feedAsync(ExecutorService service)
+	{
+		return CompletableFuture.supplyAsync(this::feed, service);
+	}
 
 	public Class<T> getType()
 	{

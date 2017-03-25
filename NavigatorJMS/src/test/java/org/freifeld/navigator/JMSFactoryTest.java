@@ -81,7 +81,17 @@ public class JMSFactoryTest
 	public void typeNotSupportedTest()
 	{
 		Assert.assertFalse(this.jmsFactory.isTypeSupported(NotSupportedClass.class));
+	}
+
+	@Test
+	public void typeNotSupportedPublisherCreationTest()
+	{
 		Assert.expectThrows(IllegalArgumentException.class, () -> this.jmsFactory.createPublisher(NotSupportedClass.class, "someTopic"));
+	}
+
+	@Test
+	public void typeNotSupportedSubscriberCreationTest()
+	{
 		Assert.expectThrows(IllegalArgumentException.class, () -> this.jmsFactory.createSubscriber(NotSupportedClass.class, "someTopic"));
 	}
 

@@ -17,7 +17,7 @@ public abstract class Publisher<T> implements AutoCloseable
 		this.topic = topic;
 	}
 
-	public abstract void fire(T data, SerializationType type);
+	public abstract void fire(T data, SerializationType serializationType);
 
 	public Class<T> getType()
 	{

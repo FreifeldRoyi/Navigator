@@ -25,11 +25,11 @@ public class JMSPublisher<T> extends Publisher<T>
 	}
 
 	@Override
-	public void fire(T data, SerializationType type)
+	public void fire(T data, SerializationType serializationType)
 	{
 		try
 		{
-			Message message = this.createMessage(data, type);
+			Message message = this.createMessage(data, serializationType);
 			this.producer.send(message);
 		}
 		catch (JMSException e)

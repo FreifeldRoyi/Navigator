@@ -14,7 +14,7 @@ public abstract class Deserializer<T> implements AutoCloseable
 	}
 
 	@Override
-	public void close() throws Exception
+	public void close()
 	{
 		//Left blank intentionally
 	}
@@ -22,4 +22,9 @@ public abstract class Deserializer<T> implements AutoCloseable
 	abstract T deserialize(String str);
 
 	abstract T deserialize(byte[] bytes);
+
+	public Class<T> getType()
+	{
+		return this.type;
+	}
 }

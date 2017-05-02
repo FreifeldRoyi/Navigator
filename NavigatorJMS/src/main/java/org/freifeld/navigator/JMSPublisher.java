@@ -1,6 +1,7 @@
 package org.freifeld.navigator;
 
 import javax.jms.*;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * @author royif
@@ -37,6 +38,38 @@ public class JMSPublisher<T> extends Publisher<T>
 			//TODO logs
 			e.printStackTrace();
 		}
+	}
+
+	@Override
+	public CompletableFuture<Object> fireAsync(T data, SerializationType serializationType)
+	{
+		CompletableFuture<Object> toReturn = new CompletableFuture<>();
+		try
+		{
+			Message message = this.createMessage(data, serializationType);
+			this.producer.send(message, new CompletionListener()
+			{
+				@Override
+				public void onCompletion(Message message)
+				{
+
+					toReturn.complete(message);
+				}
+
+				@Override
+				public void onException(Message message, Exception exception)
+				{
+					toReturn.completeExceptionally(exception);
+				}
+			});
+		}
+		catch (JMSException e)
+		{
+			//TODO logs
+			e.printStackTrace();
+		}
+
+		return toReturn;
 	}
 
 	@Override

@@ -20,6 +20,7 @@ import org.testng.annotations.Test;
 
 import javax.naming.InitialContext;
 import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 /**
@@ -94,11 +95,12 @@ public class JmsAvroComboIT
 		try (Publisher<User> userPublisher = this.pubSubFactory.createPublisher(User.class, TOPIC_USERS);
 				Subscriber<User> userSubscriber = this.pubSubFactory.createSubscriber(User.class, TOPIC_USERS))
 		{
-			CompletableFuture<User> future = CompletableFuture.supplyAsync(userSubscriber::feed);
+			CompletableFuture<List<User>> future = userSubscriber.feedAsync();
 			User jack = new User("Jack", 30);
 			userPublisher.fire(jack, type);
-			User rxUser = future.join();
-			Assert.assertEquals(jack, rxUser);
+			List<User> users = future.join();
+			Assert.assertTrue(users.size() == 1);
+			Assert.assertEquals(jack, users.get(0));
 		}
 	}
 }

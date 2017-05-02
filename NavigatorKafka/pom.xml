@@ -22,6 +22,16 @@
 			<artifactId>kafka_${version.scala}</artifactId>
 			<version>${version.kafka}</version>
 		</dependency>
+		<dependency>
+			<groupId>org.apache.kafka</groupId>
+			<artifactId>kafka-clients</artifactId>
+			<version>${version.kafka}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.kafka</groupId>
+			<artifactId>kafka-streams</artifactId>
+			<version>${version.kafka}</version>
+		</dependency>
 
 		<!-- Module dependencies -->
 		<dependency>

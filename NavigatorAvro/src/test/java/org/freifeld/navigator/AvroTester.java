@@ -6,7 +6,7 @@ import avro.org.freifeld.navigator.User;
  * @author royif
  * @since 03/03/17
  */
-public class Tester
+public class AvroTester
 {
 	public static void main(String[] args)
 	{

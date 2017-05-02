@@ -1,45 +1,35 @@
 package org.freifeld.navigator;
 
 import javax.jms.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Consumer;
 
 /**
  * @author royif
  * @since 03/03/17
  */
-public class JMSSubscriber<T> extends Subscriber<T>
+public class JMSSubscriber<T> extends Subscriber<T> implements MessageListener
 {
 	private final Connection connection;
 	private final Topic topic;
 	private final Session session;
-	private final MessageConsumer consumer;
+	private final MessageConsumer messageConsumer;
 
-	public JMSSubscriber(Class<T> type, Deserializer<T> deserializer, Topic topic, Connection connection) throws JMSException
+	public JMSSubscriber(Class<T> type, Deserializer<T> deserializer, Topic topic, Connection connection, Consumer<T> consumer) throws JMSException
 	{
-		super(type, deserializer, topic.getTopicName());
+		super(type, deserializer, topic.getTopicName(), consumer);
 		this.connection = connection;
 		this.topic = topic;
 		this.session = this.connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-		this.consumer = this.session.createConsumer(topic);
+		this.messageConsumer = this.session.createConsumer(topic);
+		if (this.consumer != null)
+		{
+			this.messageConsumer.setMessageListener(this);
+		}
+
 		this.connection.start();
-	}
 
-	@Override
-	public T feed()
-	{
-		T toReturn = null;
-		Message message = null;
-		try
-		{
-			message = this.consumer.receive();
-			toReturn = this.assembleMessage(message);
-		}
-		catch (JMSException e)
-		{
-			//TODO logs
-			e.printStackTrace();
-		}
-
-		return toReturn;
 	}
 
 	@Override
@@ -57,9 +47,44 @@ public class JMSSubscriber<T> extends Subscriber<T>
 		}
 	}
 
-	private T assembleMessage(Message message) throws JMSException
+	@Override
+	public void onMessage(Message message)
 	{
-		T toReturn = null;
+		try
+		{
+			List<T> data = this.assembleMessage(message);
+			data.forEach(this.consumer);
+		}
+		catch (JMSException e)
+		{
+			//TODO logs
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	protected List<T> legalFeed()
+	{
+		List<T> toReturn = null;
+		Message message;
+		try
+		{
+			message = this.messageConsumer.receive();
+			toReturn = this.assembleMessage(message);
+			System.out.println(message.getJMSMessageID());
+		}
+		catch (JMSException e)
+		{
+			//TODO logs
+			e.printStackTrace();
+		}
+
+		return toReturn;
+	}
+
+	private List<T> assembleMessage(Message message) throws JMSException
+	{
+		List<T> toReturn = new ArrayList<>();
 		String jmsType = message.getJMSType();
 		SerializationType type = SerializationType.valueOf(jmsType);
 		switch (type)
@@ -70,14 +95,14 @@ public class JMSSubscriber<T> extends Subscriber<T>
 				int length = bytesMessage.getIntProperty("length");
 				byte[] bytes = new byte[length];
 				bytesMessage.readBytes(bytes, length);
-				toReturn = this.deserializer.deserialize(bytes);
+				toReturn.add(this.deserializer.deserialize(bytes));
 				break;
 			}
 			case STRING:
 			{
 				TextMessage textMessage = (TextMessage) message;
 				String text = textMessage.getText();
-				toReturn = this.deserializer.deserialize(text);
+				toReturn.add(this.deserializer.deserialize(text));
 				break;
 			}
 		}

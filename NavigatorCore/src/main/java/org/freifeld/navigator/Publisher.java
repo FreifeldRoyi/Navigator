@@ -1,5 +1,7 @@
 package org.freifeld.navigator;
 
+import java.util.concurrent.CompletableFuture;
+
 /**
  * @author royif
  * @since 11/02/17
@@ -18,6 +20,8 @@ public abstract class Publisher<T> implements AutoCloseable
 	}
 
 	public abstract void fire(T data, SerializationType serializationType);
+
+	public abstract CompletableFuture<Object> fireAsync(T data, SerializationType serializationType);
 
 	public Class<T> getType()
 	{

@@ -56,7 +56,7 @@ public class JMSFactory extends PubSubFactory
 		try
 		{
 			Topic lookupTopic = (Topic) context.lookup("topic/" + topic);
-			toReturn = new JMSSubscriber<>(cls, this.serializationFactory.createDeserializer(cls), lookupTopic, this.factory.createConnection());
+			toReturn = new JMSSubscriber<>(cls, this.serializationFactory.createDeserializer(cls), lookupTopic, this.factory.createConnection(), null);
 		}
 		catch (NamingException | JMSException e)
 		{

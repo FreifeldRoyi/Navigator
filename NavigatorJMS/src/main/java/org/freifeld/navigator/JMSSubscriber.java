@@ -3,20 +3,20 @@ package org.freifeld.navigator;
 import javax.jms.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
+import java.util.function.BiConsumer;
 
 /**
  * @author royif
  * @since 03/03/17
  */
-public class JMSSubscriber<T> extends Subscriber<T> implements MessageListener
+public class JMSSubscriber<T> extends Subscriber<String, T> implements MessageListener
 {
 	private final Connection connection;
 	private final Topic topic;
 	private final Session session;
 	private final MessageConsumer messageConsumer;
 
-	public JMSSubscriber(Class<T> type, Deserializer<T> deserializer, Topic topic, Connection connection, Consumer<T> consumer) throws JMSException
+	public JMSSubscriber(Class<T> type, Deserializer<T> deserializer, Topic topic, Connection connection, BiConsumer<String, T> consumer) throws JMSException
 	{
 		super(type, deserializer, topic.getTopicName(), consumer);
 		this.connection = connection;
@@ -53,7 +53,18 @@ public class JMSSubscriber<T> extends Subscriber<T> implements MessageListener
 		try
 		{
 			List<T> data = this.assembleMessage(message);
-			data.forEach(this.consumer);
+			data.forEach(t ->
+			{
+				try
+				{
+					this.consumer.accept(message.getJMSMessageID(), t);
+				}
+				catch (JMSException e)
+				{
+					//TODO logs
+					e.printStackTrace();
+				}
+			});
 		}
 		catch (JMSException e)
 		{
@@ -71,7 +82,6 @@ public class JMSSubscriber<T> extends Subscriber<T> implements MessageListener
 		{
 			message = this.messageConsumer.receive();
 			toReturn = this.assembleMessage(message);
-			System.out.println(message.getJMSMessageID());
 		}
 		catch (JMSException e)
 		{

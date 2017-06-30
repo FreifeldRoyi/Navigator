@@ -21,7 +21,7 @@ public class KafkaTester
 		KafkaPulisher<String, String> pub = new KafkaPulisher<>(props, "test", new SimpleSerializer(String.class), new SimpleSerializer(String.class));
 		SimpleDeserializer des = new SimpleDeserializer(String.class);
 		SimpleSerializer ser = new SimpleSerializer(String.class);
-		KafkaStreamSubscriber<String, String> sub = new KafkaStreamSubscriber<>(props, "test", ser, des, ser, des, System.out::println);
+		KafkaStreamSubscriber<String, String> sub = new KafkaStreamSubscriber<>(props, "test", ser, des, ser, des, (s, s2) -> System.out.println("key = " + s + ", value = " + s2));
 		//		KafkaSubscriber<String, String> sub = new KafkaSubscriber<>(props, "test", String.class, new SimpleDeserializer(String.class), String.class, new SimpleDeserializer(String.class), null);
 
 		for (int i = 0; i < 100; i++)

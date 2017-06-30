@@ -32,7 +32,7 @@ public class KafkaFactory extends PubSubFactory
 	}
 
 	@Override
-	protected <T> Subscriber<T> createLegalSubscriber(Class<T> cls, String topic)
+	protected <T> Subscriber<String, T> createLegalSubscriber(Class<T> cls, String topic)
 	{
 		return null;
 	}

@@ -93,7 +93,7 @@ public class JmsAvroComboIT
 	private void messageSendTest(SerializationType type)
 	{
 		try (Publisher<User> userPublisher = this.pubSubFactory.createPublisher(User.class, TOPIC_USERS);
-				Subscriber<User> userSubscriber = this.pubSubFactory.createSubscriber(User.class, TOPIC_USERS))
+				Subscriber<String, User> userSubscriber = this.pubSubFactory.createSubscriber(User.class, TOPIC_USERS))
 		{
 			CompletableFuture<List<User>> future = userSubscriber.feedAsync();
 			User jack = new User("Jack", 30);

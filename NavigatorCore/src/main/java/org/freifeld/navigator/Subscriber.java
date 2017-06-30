@@ -3,20 +3,20 @@ package org.freifeld.navigator;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
-import java.util.function.Consumer;
+import java.util.function.BiConsumer;
 
 /**
  * @author royif
  * @since 24/02/17
  */
-public abstract class Subscriber<T> implements AutoCloseable
+public abstract class Subscriber<K, T> implements AutoCloseable
 {
 	protected final Deserializer<T> deserializer;
 	protected final Class<T> type;
 	protected final String topic;
-	protected final Consumer<T> consumer;
+	protected final BiConsumer<K, T> consumer;
 
-	public Subscriber(Class<T> type, Deserializer<T> deserializer, String topic, Consumer<T> consumer)
+	public Subscriber(Class<T> type, Deserializer<T> deserializer, String topic, BiConsumer<K, T> consumer)
 	{
 		this.type = type;
 		this.deserializer = deserializer;
@@ -33,7 +33,6 @@ public abstract class Subscriber<T> implements AutoCloseable
 	 * A synchronous (blocking) call to receive a new message
 	 *
 	 * @return object T
-	 *
 	 * @throws IllegalStateException if the Subscriber is in asynchronous mode
 	 */
 	public List<T> feed()
@@ -59,7 +58,6 @@ public abstract class Subscriber<T> implements AutoCloseable
 	 * Async wrapper for {@link #feed} runs on the default Java ExecutorService
 	 *
 	 * @param service - The {@link ExecutorService} to run on
-	 *
 	 * @return {@link CompletableFuture} of type T
 	 */
 	public CompletableFuture<List<T>> feedAsync(ExecutorService service)

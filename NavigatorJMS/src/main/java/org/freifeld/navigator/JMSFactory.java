@@ -49,9 +49,9 @@ public class JMSFactory extends PubSubFactory
 	}
 
 	@Override
-	protected <T> Subscriber<T> createLegalSubscriber(Class<T> cls, String topic)
+	protected <T> Subscriber<String, T> createLegalSubscriber(Class<T> cls, String topic)
 	{
-		Subscriber<T> toReturn = null;
+		Subscriber<String, T> toReturn = null;
 
 		try
 		{

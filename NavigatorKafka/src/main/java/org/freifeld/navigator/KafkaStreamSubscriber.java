@@ -10,29 +10,28 @@ import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
-import java.util.function.Consumer;
+import java.util.function.BiConsumer;
 
 /**
  * @author royif
  * @since 29/04/17.
  */
-public class KafkaStreamSubscriber<K, T> extends Subscriber<T>
+public class KafkaStreamSubscriber<K, T> extends Subscriber<K, T>
 {
 
 	private final KStream<K, T> kafkaStream;
 	private final StreamsConfig config;
 	private final KafkaStreams streams;
 
-	public KafkaStreamSubscriber(Properties props, String topic, Serializer<K> keySerializer, Deserializer<K> keyDeserializer, Serializer<T> valueSerializder, Deserializer<T> valueDeserializer,
-			Consumer<T> consumer)
+	public KafkaStreamSubscriber(Properties props, String topic, Serializer<K> keySer, Deserializer<K> keyDes, Serializer<T> valSer, Deserializer<T> valDes, BiConsumer<K, T> consumer)
 	{
-		super(valueDeserializer.getType(), valueDeserializer, topic, consumer);
+		super(valDes.getType(), valDes, topic, consumer);
 		KStreamBuilder builder = new KStreamBuilder();
 		//		this.kafkaStream = builder.stream(topic);
 
-		this.kafkaStream = builder.stream(Serdes.serdeFrom(new KafkaNavigatorSerializer<>(keySerializer), new KafkaNavigatorDeserializer<>(keyDeserializer)),
-				Serdes.serdeFrom(new KafkaNavigatorSerializer<>(valueSerializder), new KafkaNavigatorDeserializer<>(valueDeserializer)), topic);
-		this.kafkaStream.foreach((key, value) -> this.consumer.accept((T) ("key = " + key + ", value = " + value)));
+		this.kafkaStream = builder.stream(Serdes.serdeFrom(new KafkaNavigatorSerializer<>(keySer), new KafkaNavigatorDeserializer<>(keyDes)),
+				Serdes.serdeFrom(new KafkaNavigatorSerializer<>(valSer), new KafkaNavigatorDeserializer<>(valDes)), topic);
+		this.kafkaStream.foreach(this.consumer::accept);
 		this.config = new StreamsConfig(props);
 		this.streams = new KafkaStreams(builder, this.config);
 		this.streams.start();

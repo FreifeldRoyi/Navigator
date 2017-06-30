@@ -30,14 +30,14 @@ public abstract class PubSubFactory implements AutoCloseable
 		return this.createLegalPublisher(cls, topic);
 	}
 
-	public <T> Subscriber<T> createSubscriber(Class<T> cls, String topic) throws IllegalArgumentException
+	public <T> Subscriber<String, T> createSubscriber(Class<T> valCls, String topic) throws IllegalArgumentException
 	{
-		if (!supportedTypes.contains(cls))
+		if (!supportedTypes.contains(valCls))
 		{
-			throw new IllegalArgumentException("Cannot create Subscriber for type " + cls + ". Type not supported");
+			throw new IllegalArgumentException("Cannot create Subscriber for type " + valCls + ". Type not supported");
 		}
 
-		return this.createLegalSubscriber(cls, topic);
+		return this.createLegalSubscriber(valCls, topic);
 	}
 
 	public boolean isTypeSupported(Class<?> cls)
@@ -52,5 +52,5 @@ public abstract class PubSubFactory implements AutoCloseable
 
 	protected abstract <T> Publisher<T> createLegalPublisher(Class<T> cls, String topic);
 
-	protected abstract <T> Subscriber<T> createLegalSubscriber(Class<T> cls, String topic);
+	protected abstract <T> Subscriber<String, T> createLegalSubscriber(Class<T> cls, String topic);
 }

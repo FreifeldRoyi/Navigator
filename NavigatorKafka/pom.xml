@@ -13,7 +13,7 @@
 
 	<properties>
 		<version.scala>2.12</version.scala>
-		<version.kafka>0.10.2.0</version.kafka>
+		<version.kafka>1.0.0</version.kafka>
 	</properties>
 
 	<dependencies>
